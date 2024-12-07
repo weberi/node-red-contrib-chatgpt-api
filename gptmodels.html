@@ -1,0 +1,168 @@
+/* 
+node-red-contrib-chatgpt-api v1.0.0
+Copyright (c) 2024 Irene Weber
+
+MIT License (http://www.opensource.org/licenses/mit-license.php)
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+<script type="text/javascript">
+    RED.nodes.registerType("gptmodels", {
+        category: "chatgptapi",
+        color: "#DDF2FF",
+        defaults: {
+            name: { value: "" },
+            apiKey: { value: "", required: true },
+            apiEndpoint: { value: "/v1/models" },
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: "font-awesome/fa-database",
+        label: function () {
+            return this.name || "ChatGPT Models";
+        },
+        labelStyle: function () {
+            return this.name ? "node_label_italic" : "";
+        },
+        button: {
+            enabled: true,
+            onclick: function () {
+                const node = this;
+                const url = `/inject/${node.id}`;
+                $.post(url, {}, function () {
+                    RED.notify("Models retrieved successfully.", "success");
+                }).fail(function () {
+                    RED.notify("Failed to retrieve models.", "error");
+                });
+            }
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="gptmodels">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Node name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-apiKey"><i class="fa fa-key"></i> API Key</label>
+        <input type="text" id="node-input-apiKey" placeholder="Valid OpenAI API key required.">
+    </div>
+    <div class="form-row">
+        <label for="node-input-apiEndpoint"><i class="fa fa-link"></i> API Endpoint</label>
+        <input type="text" id="node-input-apiEndpoint" placeholder="/v1/models">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="gptmodels">
+    <p>
+        The <strong>gptmodels</strong> node retrieves a list of available models from the OpenAI API and outputs them as an array.
+    </p>
+
+    <h3>Inputs</h3>
+    <p>This node does not require an external input.</p>
+
+    <h3>Outputs</h3>
+    <ol class="node-ports">
+        <li>List of Models
+            <dl class="message-properties">
+                <dt>payload
+                    <span class="property-type">object</span>
+                </dt>
+                <dd>
+                    An object containing the models retrieved from the OpenAI API.
+                    <pre>
+{
+    "data": [
+        {
+            "id": "gpt-4",
+            "object": "model",
+            "created": 1688492784,
+            "owned_by": "system",
+            "permissions": [...]
+        },
+        {
+            "id": "text-davinci-003",
+            "object": "model",
+            "created": 1669066355,
+            "owned_by": "system",
+            "permissions": [...]
+        }
+    ]
+}
+                    </pre>
+                </dd>
+            </dl>
+        </li>
+    </ol>
+
+<h3>Details</h3>
+    <p>
+        Click the <strong>Inject</strong> button on the node to fetch the latest models from the Groq API. The complete API response including the data list will be sent to the  output port.
+    </p>
+
+
+<h3>Examples</h3>
+    <p>
+        Use the <strong>gptmodels</strong> node with the <strong>debug</strong> node. Here's an example:
+    </p>
+    <pre>
+[
+    {
+        "id": "f2675090c0b25571",
+        "type": "gptmodels",
+        "z": "e6beddd063317a40",
+        "name": "",
+        "apiKey": "",
+        "apiEndpoint": "/v1/models",
+        "x": 360,
+        "y": 280,
+        "wires": [
+            [
+                "11d3ad50f3f525b2",
+                "252e3a73e98fee1a"
+            ]
+        ]
+    },
+    {
+        "id": "11d3ad50f3f525b2",
+        "type": "debug",
+        "z": "e6beddd063317a40",
+        "name": "Complete Response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "252e3a73e98fee1a",
+        "type": "debug",
+        "z": "e6beddd063317a40",
+        "name": "List of Models and Descriptions",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.body.data",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 340,
+        "wires": []
+    }
+]
+    </pre>
+
+
+</script>

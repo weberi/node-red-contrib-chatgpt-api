@@ -1,0 +1,23 @@
+{
+  "name": "node-red-contrib-chatgptapi",
+  "version": "1.0.0",
+  "description": "A Node-RED node for interacting with the OpenAI ChatGPT API",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/weberi/node-red-contrib-chatgpt-api.git"
+  },
+  "keywords": ["node-red", "openai", "chatgpt", "api", "LLM", "AI"],
+  "author": "weberi",
+  "license": "MIT",
+  "node-red": {
+    "nodes": {
+      "gptapi": "gptapi.js",
+      "gptprompt": "gptprompt.js",
+      "gptmodels": "gptmodels.js"
+    }
+  },
+  "category": "ai",  
+  "publishConfig": {
+    "access": "public"
+  }
+}

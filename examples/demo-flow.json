@@ -1,0 +1,145 @@
+[
+    {
+        "id": "e6beddd063317a40",
+        "type": "tab",
+        "label": "ChatGPT API Demo",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f2675090c0b25571",
+        "type": "gptmodels",
+        "z": "e6beddd063317a40",
+        "name": "",
+        "apiKey": "",
+        "apiEndpoint": "/v1/models",
+        "x": 360,
+        "y": 280,
+        "wires": [
+            [
+                "11d3ad50f3f525b2",
+                "252e3a73e98fee1a"
+            ]
+        ]
+    },
+    {
+        "id": "11d3ad50f3f525b2",
+        "type": "debug",
+        "z": "e6beddd063317a40",
+        "name": "Complete Response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "a4a0d2e454b2d13f",
+        "type": "gptapi",
+        "z": "e6beddd063317a40",
+        "name": "",
+        "apiKey": "",
+        "apiEndpoint": "/v1/chat/completions",
+        "defaultModel": "gpt-4",
+        "defaultTemperature": 0.7,
+        "defaultMaxTokens": 1024,
+        "x": 540,
+        "y": 440,
+        "wires": [
+            [
+                "be1fa8bc83fc997d"
+            ]
+        ]
+    },
+    {
+        "id": "8968548ebd9bc6ad",
+        "type": "gptprompt",
+        "z": "e6beddd063317a40",
+        "name": "",
+        "messages": [
+            {
+                "role": "system",
+                "content": "You are a Node-RED assistant for beginners.",
+                "content-type": "str"
+            },
+            {
+                "role": "user",
+                "content": "input",
+                "content-type": "msg"
+            }
+        ],
+        "x": 330,
+        "y": 440,
+        "wires": [
+            [
+                "a4a0d2e454b2d13f"
+            ]
+        ]
+    },
+    {
+        "id": "c146108c23956682",
+        "type": "inject",
+        "z": "e6beddd063317a40",
+        "name": "",
+        "props": [
+            {
+                "p": "input",
+                "v": "Hello World!",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 150,
+        "y": 440,
+        "wires": [
+            [
+                "8968548ebd9bc6ad"
+            ]
+        ]
+    },
+    {
+        "id": "be1fa8bc83fc997d",
+        "type": "debug",
+        "z": "e6beddd063317a40",
+        "name": "ChatGPT Response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.choices[0].message.content",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "252e3a73e98fee1a",
+        "type": "debug",
+        "z": "e6beddd063317a40",
+        "name": "List of Models and Descriptions",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.body.data",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 340,
+        "wires": []
+    }
+]
